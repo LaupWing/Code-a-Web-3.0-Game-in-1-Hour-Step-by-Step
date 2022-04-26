@@ -1,3 +1,8 @@
+import { updateGround, setupGround } from "./ground.js"
+import { updatePlayer, setupPlayer, getPlayerRect, setPlayerLose } from "./player.js"
+import { updateObstacle, setupObstacle, getObstacleRects } from "./obstacle.js"
+import { updateNft, setupNft, getNftRects } from "./nft.js
+
 const GAME_WIDTH = 100
 const GAME_HEIGHT = 30
 const SPEED_SCALE_INCREASE = 0.00001
@@ -38,6 +43,21 @@ function update(time) {
    window.requestAnimationFrame(update)
 }
 window.requestAnimationFrame(update)
+
+function checkLose() {
+   const playerRect = getPlayerRect()
+   return getObstacleRects().some(rect => isCollision(rect, playerRect))
+}
+
+function isCollision(rect1, rect2) {
+   return (
+      rect1.left < rect2.right &&
+      rect1.top < rect2.bottom &&
+      rect1.right > rect2.left &&
+      rect1.bottom > rect2.top
+   )
+}
+
 
 function handleLose() {
    window.totalGweiScore += Math.floor(score)
