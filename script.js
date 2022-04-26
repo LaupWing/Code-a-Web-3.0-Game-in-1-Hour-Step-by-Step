@@ -1,7 +1,7 @@
 import { updateGround, setupGround } from "./ground.js"
 import { updatePlayer, setupPlayer, getPlayerRect, setPlayerLose } from "./player.js"
 import { updateObstacle, setupObstacle, getObstacleRects } from "./obstacle.js"
-import { updateNft, setupNft, getNftRects } from "./nft.js
+import { updateNft, setupNft, getNftRects } from "./nft.js"
 
 const GAME_WIDTH = 100
 const GAME_HEIGHT = 30
@@ -57,6 +57,46 @@ function isCollision(rect1, rect2) {
       rect1.bottom > rect2.top
    )
 }
+
+function updateSpeedScale(delta) {
+   speedScale += delta * SPEED_SCALE_INCREASE
+}
+
+function updateScore(delta) {
+   // kolku score dobivas tuka se presmetue
+   // console.log("delta u update score function = ", delta)
+   score += delta * 0.01
+   scoreElem.textContent = `Wei score: ${Math.floor(score)}`
+}
+
+
+function checkIfWeGotNft() {
+   const playerRect = getPlayerRect()
+   if (getNftRects().some(rect => isCollision(rect, playerRect))) {
+      const nftToRemove = document.querySelectorAll("[data-nft]")[0]
+      nftToRemove.remove()
+      nftScore += 1
+      nftScoreElem.textContent = `nft score: ${nftScore}`
+   }
+   return getNftRects().some(rect => isCollision(rect, playerRect))
+}
+
+function handleStart() {
+   lastTime = null
+   speedScale = 1
+   score = 0
+   setupGround()
+   setupPlayer()
+   setupObstacle()
+   setupNft()
+   startScreenElem.classList.add("hide")
+   // call this onnly wehne screen refershes
+   window.requestAnimationFrame(update)
+}
+
+
+window.totalNFTScore = 0
+window.totalGweiScore = 0
 
 
 function handleLose() {
