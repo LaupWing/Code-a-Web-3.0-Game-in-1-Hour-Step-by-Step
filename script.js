@@ -16,6 +16,11 @@ let speedScale
 let score
 let nftScore = 0
 
+function update(time){
+   window.requestAnimationFrame(update)
+}
+window.requestAnimationFrame(update)
+
 function setPixelToGameScale(){
    let gameToPixelScale
 
